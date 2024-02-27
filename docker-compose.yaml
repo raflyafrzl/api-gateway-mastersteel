@@ -1,0 +1,33 @@
+version: '3'
+services:
+  app:
+    image: ms-api-gateway:latest
+    ports:
+      - 3000:3000
+    depends_on: 
+     - service-user
+     - service-employee
+  
+  postgres:
+    image: postgres:latest
+    container_name: postgres-ms
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ms-db
+    ports:
+      - 5433:5432
+
+  service-user:
+    image: user-service:latest
+    ports:
+      - 3001:3001
+    depends_on:
+     - postgres
+  
+  service-employee:
+     image: employee-service:latest
+     ports:
+       - 3002:3002
+     depends_on:
+       - postgres
